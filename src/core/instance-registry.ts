@@ -1,20 +1,37 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
-import { Constructor } from '@/types'
+import { Constructor, ProviderRef } from '@/types'
 
-export class InstanceRegistry {
-  private readonly instances: Map<string, any> = new Map()
+export class Registry {
+  private static readonly instances: Map<string, any> = new Map()
 
-  public get<T extends Constructor>(target: T): InstanceType<T> {
+  public static get<T extends Constructor>(
+    target: T | string
+  ): InstanceType<T> {
+    if (typeof target === 'string') return this.instances.get(target)
+
     if (!this.instances.size) this.init([target])
     return this.instances.get(target.name)
   }
 
-  public init (dependencies: Constructor[]): InstanceRegistry {
-    for (const Dep of dependencies) {
-      const isInjectable = Reflect.getMetadata('injectable', Dep)
+  public static register<T extends Constructor>(target: Array<T | ProviderRef>): void {
+    Registry.init(target)
+  }
+
+  public static init (dependencies: Array<Constructor | ProviderRef>): void {
+    for (const Instance of dependencies) {
+      if (typeof Instance === 'object') {
+        const { useFactory, provide } = Instance
+        if (!useFactory || !provide) continue
+
+        this.instances.set(provide, useFactory())
+        continue
+      }
+
+      const isInjectable = Reflect.getMetadata('injectable', Instance)
       if (!isInjectable) return
 
-      const paramTypes = Reflect.getMetadata('design:paramtypes', Dep) || []
+      const paramTypes =
+        Reflect.getMetadata('design:paramtypes', Instance) || []
 
       const children = paramTypes.map((ParamType: Constructor) => {
         this.init([ParamType])
@@ -28,11 +45,9 @@ export class InstanceRegistry {
         return childInstance
       })
 
-      if (!this.instances.get(Dep.name)) {
-        this.instances.set(Dep.name, new Dep(...children))
+      if (!this.instances.get(Instance.name)) {
+        this.instances.set(Instance.name, new Instance(...children))
       }
     }
-
-    return this
   }
 }

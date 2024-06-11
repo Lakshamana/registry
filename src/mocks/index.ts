@@ -2,41 +2,23 @@
 import 'reflect-metadata'
 import '../config/module-alias'
 
-import { Injectable, InjectVariable } from '@/core/decorators'
-import { InstanceRegistry } from '@/core/instance-registry'
+import { Registry } from '@/core/instance-registry'
+import { Animal } from './animal'
+import { Dog } from './dog'
+import { Bone } from './bone'
 
-@Injectable()
-class Animal {
-  @InjectVariable()
-  animalName: string
+Registry.init([
+  Animal,
+  {
+    provide: 'dog',
+    useFactory: () => new Dog(new Animal())
+  },
+  Bone
+])
 
-  @InjectVariable('SPECIES_NAME')
-  species: string
-
-  get tag (): string {
-    return `${this.animalName}: [species=${this.species}]`
-  }
-
-  eat (): void {
-    console.log(`${this.tag} is eating`)
-  }
-}
-
-@Injectable()
-class Dog {
-  constructor (private readonly animal: Animal) {}
-
-  walk (): void {
-    console.log(`${this.animal?.animalName} is walking`)
-  }
-
-  eat (): void {
-    this.animal.eat()
-  }
-}
-
-const registry = new InstanceRegistry().init([Animal, Dog])
-const dog = registry.get(Dog)
+const dog = Registry.get('dog')
+const bone = Registry.get(Bone)
 
 dog.walk()
 dog.eat()
+bone.printOwner()
