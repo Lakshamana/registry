@@ -1,2 +1,2 @@
-export { Registry, Inject, Injectable, InjectVariable } from './src/core'
-export { TypedConstructor } from './src/types'
+export { Container, Inject, Injectable, InjectVariable } from './src/core'
+export { TypedConstructor, Provider } from './src/types'

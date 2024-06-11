@@ -1,34 +1,48 @@
-/* eslint-disable @typescript-eslint/no-extraneous-class */
-import { Constructor, ProviderRef } from '@/types'
+import { ClassIsNotInjectableError } from '../errors'
+import { Constructor, Provider } from '@/types'
 
 export class Registry {
-  private static readonly instances: Map<string, any> = new Map()
+  constructor (private readonly instances = new Map<string, any>()) {}
 
-  public static get<T extends Constructor>(
-    target: T | string
-  ): InstanceType<T> {
+  public get<T extends Constructor>(target: T | string): InstanceType<T> {
     if (typeof target === 'string') return this.instances.get(target)
 
     if (!this.instances.size) this.init([target])
     return this.instances.get(target.name)
   }
 
-  public static register<T extends Constructor>(target: Array<T | ProviderRef>): void {
-    Registry.init(target)
+  public register<T extends Constructor>(target: Array<T | Provider>): void {
+    this.init(target)
   }
 
-  public static init (dependencies: Array<Constructor | ProviderRef>): void {
-    for (const Instance of dependencies) {
-      if (typeof Instance === 'object') {
+  public init (dependencies: Array<Constructor | Provider>): Registry {
+    for (const dep of dependencies) {
+      let Instance = dep
+
+      if ('useFactory' in Instance) {
         const { useFactory, provide } = Instance
         if (!useFactory || !provide) continue
 
-        this.instances.set(provide, useFactory())
+        if (!this.instances.get(provide)) {
+          this.instances.set(provide, useFactory())
+        }
+
         continue
       }
 
+      let useProviderName = ''
+      if ('useClass' in Instance) {
+        const { useClass, provide } = Instance
+        if (!useClass || !provide) continue
+
+        Instance = useClass
+        useProviderName = provide
+      }
+
+      const useClassName = useProviderName || Instance.name
+
       const isInjectable = Reflect.getMetadata('injectable', Instance)
-      if (!isInjectable) return
+      if (!isInjectable) throw new ClassIsNotInjectableError(useClassName)
 
       const paramTypes =
         Reflect.getMetadata('design:paramtypes', Instance) || []
@@ -45,9 +59,11 @@ export class Registry {
         return childInstance
       })
 
-      if (!this.instances.get(Instance.name)) {
-        this.instances.set(Instance.name, new Instance(...children))
+      if (!this.instances.get(useClassName)) {
+        this.instances.set(useClassName, new Instance(...children))
       }
     }
+
+    return this
   }
 }

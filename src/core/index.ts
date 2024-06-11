@@ -1,3 +1,3 @@
-export * from './instance-loader'
-export * from './instance-registry'
+export * from './container'
 export * from './decorators'
+export * from './instance-registry'

@@ -1,3 +1,5 @@
+export * from './provider'
 export * from './constructor'
-export * from './provider-ref'
 export * from './typed-constructor'
+export * from './provider-class-ref'
+export * from './provider-factory-ref'

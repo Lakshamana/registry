@@ -2,22 +2,22 @@
 import 'reflect-metadata'
 import '../config/module-alias'
 
-import { Registry } from '@/core/instance-registry'
 import { Animal } from './animal'
 import { Dog } from './dog'
 import { Bone } from './bone'
+import { Container } from '@/core/container'
 
-Registry.init([
+const registry = Container.getRegistry().init([
   Animal,
+  Bone,
   {
     provide: 'dog',
     useFactory: () => new Dog(new Animal())
-  },
-  Bone
+  }
 ])
 
-const dog = Registry.get('dog')
-const bone = Registry.get(Bone)
+const dog = registry.get('dog')
+const bone = registry.get(Bone)
 
 dog.walk()
 dog.eat()
