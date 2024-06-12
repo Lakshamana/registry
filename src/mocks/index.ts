@@ -6,6 +6,7 @@ import { Animal } from './animal'
 import { Dog } from './dog'
 import { Bone } from './bone'
 import { Container } from '@/core/container'
+import { Cat } from './cat'
 
 const registry = Container.getRegistry().init([
   Animal,
@@ -13,12 +14,16 @@ const registry = Container.getRegistry().init([
   {
     provide: 'dog',
     useFactory: () => new Dog(new Animal())
-  }
+  },
+  Cat
 ])
 
 const dog = registry.get('dog')
 const bone = registry.get(Bone)
+const cat = registry.get(Cat)
 
 dog.walk()
 dog.eat()
 bone.printOwner()
+
+cat.purr()
