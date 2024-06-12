@@ -30,7 +30,7 @@ export class Registry {
         continue
       }
 
-      let useProviderName = ''
+      let useProviderName: string
       if ('useClass' in Instance) {
         const { useClass, provide } = Instance
         if (!useClass || !provide) continue

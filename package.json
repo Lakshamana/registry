@@ -39,7 +39,7 @@
     "ttypescript": "^1.5.15",
     "typescript-transform-paths": "^3.4.7"
   },
-  "name": "module-poc",
+  "name": "@lakshamana-pocs/registry",
   "description": "",
   "version": "1.0.0",
   "main": "./dist/index.js",
