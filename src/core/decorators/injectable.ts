@@ -1,4 +1,4 @@
-import { Constructor } from '@/types'
+import type { Constructor } from '@/types'
 
 export function Injectable<T extends Constructor> () {
   return function (target: T): void {

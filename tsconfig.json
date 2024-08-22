@@ -3,10 +3,7 @@
     "incremental": true,
     "outDir": "dist",
     "declaration": true,
-    "rootDirs": [
-      "./src",
-      "./tests"
-    ],
+    "rootDirs": ["./src", "./tests"],
     "target": "es2021",
     "sourceMap": true,
     "skipLibCheck": true,
@@ -16,30 +13,16 @@
     "esModuleInterop": true,
     "baseUrl": "./src",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@/tests/*": [
-        "../tests/*"
-      ]
+      "@/*": ["./*"],
+      "@/tests/*": ["../tests/*"]
     },
-    "plugins": [
-      {
-        "transform": "typescript-transform-paths",
-        "afterDeclarations": true
-      }
-    ],
+    "strictNullChecks": true,
     "strictPropertyInitialization": false,
     "noImplicitOverride": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "include": [
-    "./src",
-    "./tests"
-  ],
-  "files": [
-    "./index.ts"
-  ]
+  "include": ["./src", "./tests"],
+  "files": ["./index.ts"]
 }

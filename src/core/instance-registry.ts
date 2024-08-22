@@ -1,5 +1,5 @@
-import { ClassIsNotInjectableError } from '../errors'
-import { Constructor, Provider } from '@/types'
+import { ClassIsNotInjectableError } from '@/errors'
+import type { Constructor, Provider } from '@/types'
 
 export class Registry {
   constructor (private readonly instances = new Map<string, any>()) {}
@@ -7,15 +7,11 @@ export class Registry {
   public get<T extends Constructor>(target: T | string): InstanceType<T> {
     if (typeof target === 'string') return this.instances.get(target)
 
-    if (!this.instances.size) this.init([target])
+    if (!this.instances.size) this.register([target])
     return this.instances.get(target.name)
   }
 
-  public register<T extends Constructor>(target: Array<T | Provider>): void {
-    this.init(target)
-  }
-
-  public init (dependencies: Array<Constructor | Provider>): Registry {
+  public register (dependencies: Array<Constructor | Provider>): this {
     for (const dep of dependencies) {
       let Instance = dep
 
@@ -30,7 +26,7 @@ export class Registry {
         continue
       }
 
-      let useProviderName: string
+      let useProviderName: string = ''
       if ('useClass' in Instance) {
         const { useClass, provide } = Instance
         if (!useClass || !provide) continue
@@ -48,7 +44,7 @@ export class Registry {
         Reflect.getMetadata('design:paramtypes', Instance) || []
 
       const children = paramTypes.map((ParamType: Constructor) => {
-        this.init([ParamType])
+        this.register([ParamType])
 
         let childInstance = this.get(ParamType)
         if (!childInstance) {

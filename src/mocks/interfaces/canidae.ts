@@ -1,4 +1,4 @@
-import { Animal } from '../animal'
+import type { Animal } from '../animal'
 
 export interface Canidae {
   walk: () => void

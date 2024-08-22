@@ -1,11 +1,11 @@
 export function InjectVariable (variable?: string) {
-  return function (target: any, propertyKey: string) {
+  return function (target: any, propertyKey: string, index?: number): any {
     let value = variable
       ? process.env[variable]
       : process.env[getVariableTag(propertyKey)]
 
     const get = function (): string {
-      return value
+      return value as string
     }
 
     const set = function (newValue: string): void {
