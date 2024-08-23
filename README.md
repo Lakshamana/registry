@@ -1,10 +1,12 @@
 # Registry
 
 Are you tired of creating a thousand factory files?
+
 Are you a lazy programmer (won't judge you tbh) and just want to do your thing and let the computer do the rest?
+
 Are you tired of having to manually register your dependencies?
 
-[Your problems came to an end!](https://www.youtube.com/watch?v=9bU2Vh8rwm8)
+[Your problems are now over](https://www.youtube.com/watch?v=9bU2Vh8rwm8)
 
 ## Description
 Registry is a simple library that enable you to register and resolve dependencies automatically either via class or token.
@@ -75,12 +77,11 @@ Notice that, if you're running TypeScript 5.x you may want to declare class prop
 ```typescript
 class Class {
   constructor(
-    @InjectVariable() private readonly variable: string,
     @Inject() private readonly instance: AnotherInstance  // if you annotated `AnotherInstance` with `@Injectable()`
   ) {}
 
   method () {
-    // this.variable and this.instance are available here
+    // this.instance should be available here
   }
 }
 ```
@@ -107,7 +108,7 @@ This will help you to make your classes injectable, inject your variables or ins
 
 - `@Injectable()`: class decorator
   - Use it to annotate the classes you need to be injectable
-- `@Inject(token?: string)`: property decorator
+- `@Inject(token: string)`: property decorator
   - Use it to annotate class properties you need instances to be injected to
 - `@InjectVariable(key?: string)`: property decorator
   - Use it to annotate class properties you need variables to be injected to
