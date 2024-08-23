@@ -1,5 +1,7 @@
 # Registry
 
+[![Build Status](https://app.travis-ci.com/Lakshamana/registry.svg?token=5TkPokWmq84tfapeZkyx&branch=main)](https://app.travis-ci.com/Lakshamana/registry)
+
 Are you tired of creating a thousand factory files?
 
 Are you a lazy programmer (won't judge you tbh) and just want to do your thing and let the computer do the rest?
@@ -121,5 +123,15 @@ $ npm install
 $ cp .env.example .env
 $ npm run dev
 ```
+## Testing
+```bash
+$ npm test
+$ npm run test:watch
+$ npm run test:ci  # check coverage
+$ npm run test:staged
+```
+
 ## Contributing
-Feel free to open issue and open PRs. I'll check as soon as I can.
+Feel free to open issue and open PRs with due tests, and I'll check as soon as I can.
+
+Notice that this project is using [Semantic Versioning](https://semver.org/) and [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for versioning and commit message pattern respectively, so make sure to follow it. PRs that don't follow these patterns or don't have tests may be rejected.
