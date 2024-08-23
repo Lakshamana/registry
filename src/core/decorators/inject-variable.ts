@@ -1,5 +1,5 @@
-export function InjectVariable (variable?: string) {
-  return function (target: any, propertyKey: string, index?: number): any {
+export function InjectVariable (variable?: string): any {
+  return function (target: any, propertyKey: string, index?: number): void {
     let value = variable
       ? process.env[variable]
       : process.env[getVariableTag(propertyKey)]
