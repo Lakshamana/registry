@@ -23,6 +23,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "include": ["./src", "./tests"],
+  "include": ["./src", "./tests", "./jest.config.js"],
   "files": ["./index.ts"]
 }
